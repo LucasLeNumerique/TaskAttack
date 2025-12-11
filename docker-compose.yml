@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: taskattack-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: lucas
+      POSTGRES_PASSWORD: spectrun
+      POSTGRES_DB: taskattack
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
