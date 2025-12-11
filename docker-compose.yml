@@ -4,13 +4,29 @@ services:
     container_name: taskattack-postgres
     restart: always
     environment:
-      POSTGRES_USER: lucas
-      POSTGRES_PASSWORD: spectrun
-      POSTGRES_DB: taskattack
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ./server
+    container_name: taskattack-server
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
+      PGHOST: postgres
+      PGPORT: ${PGPORT}
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

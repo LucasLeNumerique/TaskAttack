@@ -69,11 +69,9 @@ const TodoList = () => {
   // ---- UI
   if (isLoading) return <p>Chargement…</p>;
   if (isError) return <p>Erreur lors du chargement.</p>;
-  if (!data || data.length === 0) return <p>Aucune tâche pour le moment.</p>;
 
   return (
     <div>
-      <h1>Todo List</h1>
 
       {/* CREATE */}
       <form
@@ -93,48 +91,54 @@ const TodoList = () => {
       </form>
 
       <ul>
-        {data.map((task) => (
-          <li key={task.id}>
-            {editingId === task.id ? (
-              <>
-                <input
-                  value={editingTitle}
-                  onChange={(e) => setEditingTitle(e.target.value)}
-                />
-                <button
-                  onClick={() =>
-                    updateTask.mutate({ id: task.id, title: editingTitle })
-                  }
-                >
-                  Sauver
-                </button>
-                <button onClick={() => setEditingId(null)}>Annuler</button>
-              </>
-            ) : (
-              <>
-                <input
-                  type="checkbox"
-                  checked={task.done}
-                  onChange={() =>
-                    updateTask.mutate({ id: task.id, done: !task.done })
-                  }
-                />
-                {task.title}
-                <button
-                  onClick={() => {
-                    setEditingId(task.id);
-                    setEditingTitle(task.title);
-                  }}
-                >
-                  Modifier
-                </button>
-                <button onClick={() => deleteTask.mutate(task.id)}>
-                  Supprimer
-                </button>
-              </>
-            )}
-          </li>
-        ))}
+        {(!data || data.length === 0) ? (
+          <p>Aucune tâche pour le moment.</p>
+        ) : (
+          data.map((task) => (
+            <li key={task.id}>
+              {editingId === task.id ? (
+                <>
+                  <input
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                  />
+                  <button
+                    onClick={() =>
+                      updateTask.mutate({ id: task.id, title: editingTitle })
+                    }
+                  >
+                    Sauver
+                  </button>
+                  <button onClick={() => setEditingId(null)}>
+                    Annuler
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="checkbox"
+                    checked={task.done}
+                    onChange={() =>
+                      updateTask.mutate({ id: task.id, done: !task.done })
+                    }
+                  />
+                  {task.title}
+                  <button
+                    onClick={() => {
+                      setEditingId(task.id);
+                      setEditingTitle(task.title);
+                    }}
+                  >
+                    Modifier
+                  </button>
+                  <button onClick={() => deleteTask.mutate(task.id)}>
+                    Supprimer
+                  </button>
+                </>
+              )}
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
